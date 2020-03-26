@@ -1,0 +1,6 @@
+applications:
+- name: H2-JPA-Swagger-Profile-Lombok-RestTemplate
+path: target/spring-boot-jpa-with-hibernate-and-h2-0.0.1-SNAPSHOT.jar
+domain: cfapps.io
+memory: 950M
+instances: 1
