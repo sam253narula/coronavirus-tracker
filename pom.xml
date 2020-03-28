@@ -12,7 +12,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.0.4.RELEASE</version>
+		<version>2.0.1.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -20,11 +20,13 @@
 	<description>Corona Virus Tracker project using Spring Boot</description>
 
 	<properties>
-		<java.version>12</java.version>
+		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<javafx.version>12</javafx.version>
-		<javafx.platform>\%win\%</javafx.platform>
+		<!-- <javafx.platform>\%win\%</javafx.platform> -->
 	</properties>
 
 	<dependencies>
@@ -35,12 +37,8 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.hibernate.validator</groupId>
-					<artifactId>hibernate-validator</artifactId>
-				</exclusion>
-			</exclusions>
+			<!-- <exclusions> <exclusion> <groupId>org.hibernate.validator</groupId> 
+				<artifactId>hibernate-validator</artifactId> </exclusion> </exclusions> -->
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -60,48 +58,28 @@
 		<!-- <dependency> <groupId>javax.xml.bind</groupId> <artifactId>jaxb-api</artifactId> 
 			<version>2.3.0</version> </dependency> -->
 		<!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
-		<dependency>
-			<groupId>org.hibernate.validator</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>6.0.17.Final</version>
-		</dependency>
+		<!-- <dependency> <groupId>org.hibernate.validator</groupId> <artifactId>hibernate-validator</artifactId> 
+			<version>6.0.17.Final</version> </dependency> -->
 
-		<dependency>
-			<groupId>org.javassist</groupId>
-			<artifactId>javassist</artifactId>
-			<version>3.25.0-GA</version>
-		</dependency>
-		<!-- Valid values are: linux, win, mac, who said java is platform independent, 
-			below example kills the definition. -->
-		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-controls</artifactId>
-			<version>12</version>
-			<classifier>win</classifier>
-		</dependency>
+		<!-- <dependency> <groupId>org.javassist</groupId> <artifactId>javassist</artifactId> 
+			<version>3.25.0-GA</version> </dependency> Valid values are: linux, win, 
+			mac, who said java is platform independent, below example kills the definition. 
+			<dependency> <groupId>org.openjfx</groupId> <artifactId>javafx-controls</artifactId> 
+			<version>12</version> <classifier>win</classifier> </dependency> -->
 	</dependencies>
 
+	<!-- <build> <plugins> <plugin> <groupId>org.springframework.boot</groupId> 
+		<artifactId>spring-boot-maven-plugin</artifactId> <configuration> <source>1.8</source> 
+		<target>1.8</target> </configuration> </plugin> <plugin> <artifactId>maven-compiler-plugin</artifactId> 
+		<configuration> <source>1.8</source> <target>1.8</target> <verbose>true</verbose> 
+		<fork>true</fork> <executable>C:\Program Files\Java\jdk1.8.0_201\bin\javac</executable> 
+		</configuration> </plugin> </plugins> </build> -->
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<source>12</source>
-					<target>12</target>
-				</configuration>
 			</plugin>
-			<plugin>
-	<artifactId>maven-compiler-plugin</artifactId>
-	<version>3.1</version>
-	<configuration>
-		<source>12</source>
-		<target>12</target>
-		<verbose>true</verbose>
-		<fork>true</fork>
-		<executable>C:\Program Files\Java\jdk-12\bin\javac</executable>
-	</configuration>
-</plugin>
 		</plugins>
 	</build>
 

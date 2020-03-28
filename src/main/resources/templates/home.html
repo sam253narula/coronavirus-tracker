@@ -42,7 +42,6 @@
 		<table class="table table-bordered">
 			<thead class="thead-dark">
 				<tr>
-					<th>State</th>
 					<th>Country</th>
 					<th>Total cases reported</th>
 					<th>Changes since last day</th>
@@ -50,7 +49,6 @@
 			</thead>
 			<tr th:each="locationStat : ${locationStats}">
 				<td th:text="${locationStat.state}"></td>
-				<td th:text="${locationStat.country}"></td>
 				<td th:text="${locationStat.latestTotalCases}">0</td>
 				<td th:text="${locationStat.diffFromPrevDay}">0</td>
 			</tr>
