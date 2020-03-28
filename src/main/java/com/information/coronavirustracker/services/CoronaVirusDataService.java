@@ -7,7 +7,9 @@ import java.io.StringReader;
 //import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -52,12 +54,13 @@ public class CoronaVirusDataService {
 		List<LocationStats> newStats = new ArrayList<>();
 		StringReader csvBodyReader = new StringReader(response.toString());
 		Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvBodyReader);
-
 		for (CSVRecord record : records) {
 			if (record.getRecordNumber() < 248) {
+				
 				LocationStats locationStat = new LocationStats();
-				locationStat.setState(record.get("Province/State"));
-				locationStat.setCountry(record.get("Country/Region"));
+				//Province/State these values are not used, because it is getting wrongly mapped.
+				locationStat.setState(record.get(0).equals("") ? " ": record.get(0));
+				locationStat.setCountry(record.get(1));
 				int latestCases = Integer.parseInt(record.get(record.size() - 1));
 				int prevDayCases = Integer.parseInt(record.get(record.size() - 2));
 				locationStat.setLatestTotalCases(latestCases);
