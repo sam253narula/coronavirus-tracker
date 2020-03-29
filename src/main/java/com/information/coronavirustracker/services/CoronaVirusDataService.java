@@ -18,6 +18,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -51,24 +52,27 @@ public class CoronaVirusDataService {
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
 		ResponseEntity<String> response = restTemplate.exchange(VIRUS_DATA_URL, HttpMethod.GET, entity, String.class);
-		List<LocationStats> newStats = new ArrayList<>();
-		StringReader csvBodyReader = new StringReader(response.toString());
-		Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvBodyReader);
-		for (CSVRecord record : records) {
-			if (record.getRecordNumber() < 248) {
-				
-				LocationStats locationStat = new LocationStats();
-				//Province/State these values are not used, because it is getting wrongly mapped.
-				locationStat.setState(record.get(0).equals("") ? " ": record.get(0));
-				locationStat.setCountry(record.get(1));
-				int latestCases = Integer.parseInt(record.get(record.size() - 1));
-				int prevDayCases = Integer.parseInt(record.get(record.size() - 2));
-				locationStat.setLatestTotalCases(latestCases);
-				locationStat.setDiffFromPrevDay(latestCases - prevDayCases);
-				newStats.add(locationStat);
+		if (response.getStatusCode() == HttpStatus.OK) {
+			List<LocationStats> newStats = new ArrayList<>();
+			StringReader csvBodyReader = new StringReader(response.getBody());
+			Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvBodyReader);
+
+			for (CSVRecord record : records) {
+				if (record.getRecordNumber() < 248) {
+					LocationStats locationStat = new LocationStats();
+					// Province/State these values are not used, because it is getting wrongly
+					// mapped.
+					locationStat.setState(record.get(0).equals("") ? " " : record.get(0));
+					locationStat.setCountry(record.get(1));
+					int latestCases = Integer.parseInt(record.get(record.size() - 1));
+					int prevDayCases = Integer.parseInt(record.get(record.size() - 2));
+					locationStat.setLatestTotalCases(latestCases);
+					locationStat.setDiffFromPrevDay(latestCases - prevDayCases);
+					newStats.add(locationStat);
+				}
 			}
+			this.allStats = newStats;
 		}
-		this.allStats = newStats;
 	}
 
 	// HTTP GET request for india
@@ -81,26 +85,25 @@ public class CoronaVirusDataService {
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
 		ResponseEntity<String> response = restTemplate.exchange(VIRUS_DATA_URL, HttpMethod.GET, entity, String.class);
-		List<LocationStats> newIndiaStats = new ArrayList<>();
-		StringReader csvBodyReader = new StringReader(response.toString().trim());
-		Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvBodyReader);
-//		int counter = 0;
-//		for (CSVRecord record : records) {
-//			counter++;
-//		}
-		for (CSVRecord record : records) {
-			if (record.getRecordNumber() == 132) {
-				LocationStats indianLocationStat = new LocationStats();
-				indianLocationStat.setState(record.get("Province/State"));
-				indianLocationStat.setCountry(record.get("Country/Region"));
-				int latestCases = Integer.parseInt(record.get(record.size() - 1));
-				int prevDayCases = Integer.parseInt(record.get(record.size() - 2));
-				indianLocationStat.setLatestTotalCases(latestCases);
-				indianLocationStat.setDiffFromPrevDay(latestCases - prevDayCases);
-				newIndiaStats.add(indianLocationStat);
+		if (response.getStatusCode() == HttpStatus.OK) {
+			List<LocationStats> newIndiaStats = new ArrayList<>();
+			StringReader csvBodyReader = new StringReader(response.getBody());
+			Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvBodyReader);
+
+			for (CSVRecord record : records) {
+				if (record.getRecordNumber() == 132) {
+					LocationStats indianLocationStat = new LocationStats();
+					indianLocationStat.setState(record.get("Province/State"));
+					indianLocationStat.setCountry(record.get("Country/Region"));
+					int latestCases = Integer.parseInt(record.get(record.size() - 1));
+					int prevDayCases = Integer.parseInt(record.get(record.size() - 2));
+					indianLocationStat.setLatestTotalCases(latestCases);
+					indianLocationStat.setDiffFromPrevDay(latestCases - prevDayCases);
+					newIndiaStats.add(indianLocationStat);
+				}
 			}
+			this.indianStats = newIndiaStats;
 		}
-		this.indianStats = newIndiaStats;
 	}
 
 }
